@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Property Details — NestFinder</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="mainNav">
+  <a class="nav-logo" href="index.html">
+    <div class="nav-logo-icon">
+      <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    </div>
+    Nest<span>Finder</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="map.html">Map Search</a>
+    <a href="upload.html">List Property</a>
+  </div>
+  <div class="nav-cta">
+    <a href="map.html" class="btn-ghost">← Back to Map</a>
+  </div>
+  <button class="nav-hamburger"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="detail-page" id="propDetail">
+
+  <!-- Gallery -->
+  <div class="detail-hero-gallery" id="detailGallery">
+    <div style="background:var(--gray-1);display:flex;align-items:center;justify-content:center;color:var(--gray-3);font-size:1.5rem;grid-column:1/-1">Loading...</div>
+  </div>
+
+  <div class="detail-layout">
+
+    <!-- Main Content -->
+    <div class="detail-main">
+      <div style="margin-bottom:8px">
+        <a href="map.html" style="font-size:0.82rem;color:var(--gray-3);display:inline-flex;align-items:center;gap:6px;margin-bottom:14px">← Back to map</a>
+      </div>
+      <h1 id="detailTitle">Loading...</h1>
+      <div class="detail-meta">
+        <span class="detail-badge" id="detailBadge">—</span>
+        <span class="detail-city" id="detailCity">—</span>
+      </div>
+
+      <!-- Description -->
+      <div class="detail-section">
+        <h2>About this property</h2>
+        <p class="detail-desc" id="detailDesc"></p>
+      </div>
+
+      <!-- Amenities -->
+      <div class="detail-section">
+        <h2>Amenities</h2>
+        <div class="amenity-pills" id="detailAmenities"></div>
+      </div>
+
+      <!-- Agreement Summary -->
+      <div class="detail-section">
+        <h2>Rental Agreement Summary</h2>
+        <div id="detailAgrTerms"></div>
+      </div>
+
+      <!-- Map mini -->
+      <div class="detail-section">
+        <h2>Location on Map</h2>
+        <div id="miniMap" style="height:240px;border-radius:16px;overflow:hidden;border:1px solid var(--gray-2)"></div>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="detail-sidebar">
+      <div class="price-card">
+        <div class="price-card-price" id="detailPrice">—</div>
+        <div class="price-card-info">per month · No brokerage</div>
+
+        <div class="price-card-details">
+          <div class="price-detail-row">
+            <span>Security Deposit</span>
+            <span id="detailDeposit">—</span>
+          </div>
+          <div class="price-detail-row">
+            <span>Minimum Stay</span>
+            <span id="detailMinStay">—</span>
+          </div>
+          <div class="price-detail-row">
+            <span>Configuration</span>
+            <span id="detailBhk">—</span>
+          </div>
+          <div class="price-detail-row">
+            <span>Floor</span>
+            <span id="detailFloor">—</span>
+          </div>
+        </div>
+
+        <a href="#" id="scheduleBtn" class="btn-full btn-schedule">📅 Schedule a Visit</a>
+        <a href="#" id="agreementBtn" class="btn-full btn-agr" style="display:block;text-align:center;">📄 View Agreement</a>
+      </div>
+
+      <div class="owner-card">
+        <div class="owner-avatar" id="ownerInitial">?</div>
+        <h3 id="ownerName">Owner</h3>
+        <p>Verified Property Owner</p>
+        <div class="contact-btns">
+          <a class="contact-btn" id="ownerPhone">📞 Call</a>
+          <a class="contact-btn" id="ownerEmail">✉ Email</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-bottom container">
+    <span>© 2025 <span>NestFinder</span>. All rights reserved.</span>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="script.js"></script>
+<script>
+// Mini map init after data loads
+(async () => {
+  const id = parseInt(new URLSearchParams(window.location.search).get('id'));
+  const res = await fetch('properties.json');
+  const props = await res.json();
+  const p = props.find(x => x.id === id);
+  if (!p) return;
+
+  // Render mini map
+  const miniMap = L.map('miniMap', { zoomControl: false, scrollWheelZoom: false })
+    .setView([p.lat, p.lng], 14);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(miniMap);
+  const colors = { apartment: '#00A699', house: '#FFB400', shop: '#FF5A5F' };
+  const icon = L.divIcon({
+    className: '',
+    html: `<div style="background:${colors[p.type]};width:18px;height:18px;border-radius:50%;border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.2)"></div>`,
+    iconAnchor: [9, 9]
+  });
+  L.marker([p.lat, p.lng], { icon }).addTo(miniMap).bindPopup(p.title).openPopup();
+})();
+</script>
+</body>
+</html>

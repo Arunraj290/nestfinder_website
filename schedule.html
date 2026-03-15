@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Schedule a Visit — NestFinder</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="mainNav">
+  <a class="nav-logo" href="index.html">
+    <div class="nav-logo-icon">
+      <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    </div>
+    Nest<span>Finder</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="map.html">Map Search</a>
+    <a href="upload.html">List Property</a>
+  </div>
+  <button class="nav-hamburger"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="schedule-page">
+  <div class="page-title">📅 Schedule a Visit</div>
+  <p class="page-sub">Book a convenient time to visit the property. The owner will confirm within a few hours.</p>
+
+  <div class="schedule-form" id="scheduleFormWrap">
+
+    <!-- Property preview card -->
+    <div class="schedule-property-card" id="schedulePropCard">
+      <div style="color:var(--gray-3);font-size:0.85rem">Loading property details...</div>
+    </div>
+
+    <form id="scheduleForm">
+
+      <div class="form-section">
+        <div class="form-section-title">👤 Your Details</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Full Name *</label>
+            <input type="text" class="form-input" placeholder="Your name" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone Number *</label>
+            <input type="tel" class="form-input" placeholder="+91 XXXXX XXXXX" required>
+          </div>
+          <div class="form-group form-full">
+            <label class="form-label">Email Address</label>
+            <input type="email" class="form-input" placeholder="you@example.com">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">🗓 Visit Preferences</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Preferred Date *</label>
+            <input type="date" class="form-input" id="visitDate" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Preferred Time *</label>
+            <select class="form-input" required>
+              <option value="">Select a time slot</option>
+              <option>9:00 AM – 10:00 AM</option>
+              <option>10:00 AM – 11:00 AM</option>
+              <option>11:00 AM – 12:00 PM</option>
+              <option>12:00 PM – 1:00 PM</option>
+              <option>2:00 PM – 3:00 PM</option>
+              <option>3:00 PM – 4:00 PM</option>
+              <option>4:00 PM – 5:00 PM</option>
+              <option>5:00 PM – 6:00 PM</option>
+            </select>
+          </div>
+          <div class="form-group form-full">
+            <label class="form-label">Message to Owner</label>
+            <textarea class="form-input" rows="3" placeholder="Any specific questions or requirements?" style="resize:vertical"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:rgba(255,90,95,0.05);border:1.5px solid rgba(255,90,95,0.15);border-radius:12px;padding:16px;margin-bottom:20px;font-size:0.85rem;color:var(--text-sub)">
+        🔒 Your contact information will only be shared with the property owner after you submit this request.
+      </div>
+
+      <button type="submit" class="submit-btn">✅ Confirm Visit Request</button>
+    </form>
+
+    <!-- Success -->
+    <div class="success-msg" id="scheduleSuccess">
+      <div class="success-circle">📅</div>
+      <h3>Visit Scheduled!</h3>
+      <p>Your visit request has been sent to the property owner. You'll receive a confirmation via SMS and email within 2 hours.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:20px">
+        <a href="index.html" class="btn-ghost" style="border:1.5px solid var(--gray-2);padding:11px 22px;border-radius:50px;font-weight:500">← Home</a>
+        <a href="map.html" class="btn-primary" style="display:inline-block;padding:11px 24px">Browse More →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer" style="margin-top:60px">
+  <div class="footer-bottom container">
+    <span>© 2025 <span>NestFinder</span>. All rights reserved.</span>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script>
+  // Set minimum date to today
+  document.getElementById('visitDate').min = new Date().toISOString().split('T')[0];
+</script>
+</body>
+</html>

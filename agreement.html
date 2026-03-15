@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rental Agreement — NestFinder</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="mainNav">
+  <a class="nav-logo" href="index.html">
+    <div class="nav-logo-icon">
+      <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    </div>
+    Nest<span>Finder</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="map.html">Map Search</a>
+  </div>
+  <button class="nav-hamburger"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="agr-page" id="agrContent">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+    <a onclick="history.back()" style="cursor:pointer;color:var(--gray-3);font-size:0.85rem">← Back</a>
+  </div>
+
+  <div class="agr-doc">
+    <div class="agr-header">
+      <div style="font-size:2rem;margin-bottom:8px">📄</div>
+      <h1>Rental Agreement</h1>
+      <p>This agreement is entered into on <strong id="agrDate">—</strong></p>
+      <p style="margin-top:6px;font-size:0.85rem;color:var(--coral)">Property: <span id="agrPropertyName">Loading...</span></p>
+    </div>
+
+    <div class="agr-section">
+      <h2>🏠 Property Details</h2>
+      <p><strong>Property:</strong> <span id="agrPropertyName2">—</span></p>
+      <p><strong>Address:</strong> <span id="agrAddress">—</span></p>
+      <p><strong>Owner / Landlord:</strong> <span id="agrOwnerName">—</span></p>
+    </div>
+
+    <div class="agr-section">
+      <h2>💰 Financial Terms</h2>
+      <div class="agr-highlight">
+        <strong>Monthly Rent:</strong> <span id="agrRent">—</span>
+      </div>
+      <div class="agr-highlight" style="margin-top:8px">
+        <strong>Security Deposit:</strong> <span id="agrDeposit">—</span> (refundable)
+      </div>
+      <p style="margin-top:12px"><strong>Payment Terms:</strong> <span id="agrPaymentTerms">—</span></p>
+      <p><strong>Accepted Payment Modes:</strong> Bank Transfer, UPI, NEFT/RTGS</p>
+      <p><strong>Late Payment:</strong> ₹500 per day surcharge after 5-day grace period.</p>
+    </div>
+
+    <div class="agr-section">
+      <h2>📅 Duration & Termination</h2>
+      <div class="agr-highlight">
+        <strong>Minimum Stay Period:</strong> <span id="agrMinStay">—</span>
+      </div>
+      <p style="margin-top:12px">Either party may terminate this agreement by providing a minimum of <strong>1 calendar month's written notice</strong> after the minimum stay period.</p>
+      <p>In case of early vacating without proper notice, the tenant shall forfeit 1 month's rent from the security deposit.</p>
+    </div>
+
+    <div class="agr-section">
+      <h2>✅ Tenant Responsibilities</h2>
+      <ul>
+        <li>Maintain the property in clean and good condition throughout the tenancy.</li>
+        <li>Pay electricity, water, internet, and other utility bills promptly.</li>
+        <li>Not sublet or assign any part of the premises to any third party.</li>
+        <li>Not carry out structural alterations without prior written consent from the landlord.</li>
+        <li>Inform the landlord of any damage or required repairs within 48 hours of occurrence.</li>
+        <li>Vacate the property on or before the agreed vacating date and return all keys.</li>
+        <li>Comply with all society rules, regulations, and maintenance norms.</li>
+      </ul>
+    </div>
+
+    <div class="agr-section">
+      <h2>🔐 Security Deposit Terms</h2>
+      <p>The security deposit shall be refunded within <strong>30 days</strong> after the tenant vacates the premises, subject to the following deductions:</p>
+      <ul>
+        <li>Cost of any damage to the property beyond normal wear and tear.</li>
+        <li>Unpaid rent or utility dues.</li>
+        <li>Cost of professional cleaning if not maintained in original condition.</li>
+      </ul>
+      <div class="agr-highlight" style="margin-top:12px">
+        The security deposit shall not earn any interest during the tenancy period.
+      </div>
+    </div>
+
+    <div class="agr-section">
+      <h2>🚫 Prohibited Activities</h2>
+      <ul>
+        <li>No commercial activities in a residential property (unless permitted).</li>
+        <li>No subletting or paying guests without landlord's written consent.</li>
+        <li>No pets (unless agreed separately in writing).</li>
+        <li>No illegal activities on the premises.</li>
+        <li>No excessive noise between 10 PM and 7 AM.</li>
+      </ul>
+    </div>
+
+    <div class="agr-section">
+      <h2>🔧 Maintenance & Repairs</h2>
+      <p><strong>Landlord's responsibility:</strong> Major structural repairs, plumbing, electrical wiring, and appliances provided at the time of agreement.</p>
+      <p><strong>Tenant's responsibility:</strong> Day-to-day maintenance, minor repairs below ₹1,000, and upkeep of appliances.</p>
+    </div>
+
+    <div class="agr-section">
+      <h2>⚖️ Dispute Resolution</h2>
+      <p>Any disputes arising under this agreement shall be resolved through mutual discussion. If unresolved, disputes shall be referred to arbitration under the Arbitration and Conciliation Act, 1996, in the jurisdiction of the city where the property is located.</p>
+    </div>
+
+    <!-- Signature area -->
+    <div class="agr-sign-area">
+      <div class="sign-box">
+        <div class="sign-line"></div>
+        <div class="sign-label">Landlord's Signature</div>
+        <div style="font-size:0.8rem;color:var(--text-sub);margin-top:4px" id="agrOwnerName2">—</div>
+        <div style="font-size:0.75rem;color:var(--gray-3)">Date: <span id="agrSignDate">—</span></div>
+      </div>
+      <div class="sign-box">
+        <div class="sign-line"></div>
+        <div class="sign-label">Tenant's Signature</div>
+        <div style="font-size:0.8rem;color:var(--text-sub);margin-top:4px">____________________</div>
+        <div style="font-size:0.75rem;color:var(--gray-3)">Date: _______________</div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:28px">
+      <p style="font-size:0.75rem;color:var(--gray-3);margin-bottom:20px">
+        This is a standard rental agreement template for preview purposes. A registered agreement must be executed for legal validity.
+      </p>
+      <button onclick="window.print()" style="background:var(--navy);color:white;border:none;padding:12px 28px;border-radius:50px;font-size:0.9rem;font-weight:600;cursor:pointer;margin-right:10px">🖨 Print Agreement</button>
+      <button onclick="history.back()" style="background:none;border:1.5px solid var(--gray-2);color:var(--text-sub);padding:12px 24px;border-radius:50px;font-size:0.9rem;font-weight:500;cursor:pointer">← Go Back</button>
+    </div>
+  </div>
+</div>
+
+<footer class="footer" style="margin-top:60px">
+  <div class="footer-bottom container">
+    <span>© 2025 <span>NestFinder</span>. All rights reserved.</span>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script>
+// Sync the duplicate name/date elements
+(async () => {
+  await new Promise(r => setTimeout(r, 200)); // wait for main script
+  const n = document.getElementById('agrOwnerName')?.textContent;
+  if (document.getElementById('agrOwnerName2')) document.getElementById('agrOwnerName2').textContent = n || '';
+  if (document.getElementById('agrPropertyName2')) document.getElementById('agrPropertyName2').textContent = document.getElementById('agrPropertyName')?.textContent || '';
+  const d = document.getElementById('agrDate')?.textContent;
+  if (document.getElementById('agrSignDate')) document.getElementById('agrSignDate').textContent = d || '';
+})();
+</script>
+</body>
+</html>

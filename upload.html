@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>List Your Property — NestFinder</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="mainNav">
+  <a class="nav-logo" href="index.html">
+    <div class="nav-logo-icon">
+      <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    </div>
+    Nest<span>Finder</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="map.html">Map Search</a>
+    <a href="upload.html" class="active">List Property</a>
+  </div>
+  <div class="nav-cta">
+    <a href="map.html" class="btn-ghost">Browse Map</a>
+  </div>
+  <button class="nav-hamburger"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="upload-page">
+  <div class="page-title">📋 List Your Property</div>
+  <p class="page-sub">Fill in the details below and reach thousands of verified renters — completely free.</p>
+
+  <div class="upload-form" id="uploadFormWrap">
+    <form id="uploadForm">
+
+      <!-- Owner Info -->
+      <div class="form-section">
+        <div class="form-section-title">👤 Owner Information</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Full Name *</label>
+            <input type="text" class="form-input" placeholder="Your full name" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone Number *</label>
+            <input type="tel" class="form-input" placeholder="+91 XXXXX XXXXX" required>
+          </div>
+          <div class="form-group form-full">
+            <label class="form-label">Email Address *</label>
+            <input type="email" class="form-input" placeholder="you@example.com" required>
+          </div>
+        </div>
+      </div>
+
+      <!-- Property Details -->
+      <div class="form-section">
+        <div class="form-section-title">🏠 Property Details</div>
+
+        <div class="form-group" style="margin-bottom:18px">
+          <label class="form-label">Property Type *</label>
+          <div class="radio-group">
+            <div class="radio-chip">
+              <input type="radio" name="propType" id="typeApt" value="apartment" checked>
+              <label for="typeApt">🏢 Apartment</label>
+            </div>
+            <div class="radio-chip">
+              <input type="radio" name="propType" id="typeHouse" value="house">
+              <label for="typeHouse">🏠 House</label>
+            </div>
+            <div class="radio-chip">
+              <input type="radio" name="propType" id="typeShop" value="shop">
+              <label for="typeShop">🏪 Shop</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom:18px">
+          <label class="form-label">Configuration</label>
+          <div class="radio-group">
+            <div class="radio-chip">
+              <input type="radio" name="bhk" id="bhk1" value="1BHK" checked>
+              <label for="bhk1">1 BHK</label>
+            </div>
+            <div class="radio-chip">
+              <input type="radio" name="bhk" id="bhk2" value="2BHK">
+              <label for="bhk2">2 BHK</label>
+            </div>
+            <div class="radio-chip">
+              <input type="radio" name="bhk" id="bhk3" value="3BHK">
+              <label for="bhk3">3 BHK</label>
+            </div>
+            <div class="radio-chip">
+              <input type="radio" name="bhk" id="bhkStudio" value="Studio">
+              <label for="bhkStudio">Studio</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-grid three">
+          <div class="form-group">
+            <label class="form-label">Floor Number</label>
+            <input type="number" class="form-input" placeholder="e.g. 2" min="0" max="50">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Monthly Rent (₹) *</label>
+            <input type="number" class="form-input" placeholder="e.g. 25000" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Security Deposit (₹)</label>
+            <input type="number" class="form-input" placeholder="e.g. 50000">
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top:18px">
+          <label class="form-label">Full Address *</label>
+          <textarea class="form-input" rows="3" placeholder="Street, Area, City, State, PIN Code" required style="resize:vertical"></textarea>
+        </div>
+
+        <div class="form-grid" style="margin-top:18px">
+          <div class="form-group">
+            <label class="form-label">Latitude</label>
+            <input type="number" class="form-input" placeholder="e.g. 12.9352" step="0.0001" id="latInput">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Longitude</label>
+            <input type="number" class="form-input" placeholder="e.g. 77.6245" step="0.0001" id="lngInput">
+          </div>
+        </div>
+        <button type="button" onclick="getMyLocation()" style="margin-top:10px;background:none;border:1.5px dashed var(--gray-2);color:var(--text-sub);padding:8px 16px;border-radius:50px;font-size:0.82rem;cursor:pointer;transition:var(--trans)">
+          📍 Use My Current Location
+        </button>
+
+        <div class="form-group" style="margin-top:18px">
+          <label class="form-label">Property Description</label>
+          <textarea class="form-input" rows="4" placeholder="Describe the property — layout, surroundings, unique features..." style="resize:vertical"></textarea>
+        </div>
+      </div>
+
+      <!-- Amenities -->
+      <div class="form-section">
+        <div class="form-section-title">✨ Amenities</div>
+        <div class="amenity-grid">
+          <label class="amenity-item"><input type="checkbox" checked> <label>WiFi</label></label>
+          <label class="amenity-item"><input type="checkbox"> <label>Parking</label></label>
+          <label class="amenity-item"><input type="checkbox"> <label>Gym</label></label>
+          <label class="amenity-item"><input type="checkbox"> <label>Swimming Pool</label></label>
+          <label class="amenity-item"><input type="checkbox"> <label>24/7 Security</label></label>
+          <label class="amenity-item"><input type="checkbox"> <label>Power Backup</label></label>
+          <label class="amenity-item"><input type="checkbox"> <label>Lift / Elevator</label></label>
+          <label class="amenity-item"><input type="checkbox"> <label>Garden / Park</label></label>
+          <label class="amenity-item"><input type="checkbox"> <label>CCTV</label></label>
+          <label class="amenity-item"><input type="checkbox"> <label>AC</label></label>
+          <label class="amenity-item"><input type="checkbox"> <label>Modular Kitchen</label></label>
+          <label class="amenity-item"><input type="checkbox"> <label>Terrace</label></label>
+          <label class="amenity-item"><input type="checkbox"> <label>Laundry</label></label>
+          <label class="amenity-item"><input type="checkbox"> <label>Intercom</label></label>
+          <label class="amenity-item"><input type="checkbox"> <label>Club House</label></label>
+          <label class="amenity-item"><input type="checkbox"> <label>Children's Play Area</label></label>
+        </div>
+      </div>
+
+      <!-- Media -->
+      <div class="form-section">
+        <div class="form-section-title">📸 Property Media</div>
+
+        <label class="form-label" style="margin-bottom:8px;display:block">Property Images</label>
+        <div class="file-drop" id="imageDrop">
+          <div class="file-drop-icon">🖼</div>
+          <p><strong>Click to upload</strong> or drag and drop images here</p>
+          <p style="font-size:0.75rem;margin-top:6px">PNG, JPG up to 10MB each</p>
+          <div class="file-preview" id="imagePreview"></div>
+        </div>
+        <input type="file" id="imageFiles" multiple accept="image/*" style="display:none">
+
+        <div class="form-group" style="margin-top:18px">
+          <label class="form-label">Video Tour URL (YouTube/Drive)</label>
+          <input type="url" class="form-input" placeholder="https://youtube.com/...">
+        </div>
+      </div>
+
+      <!-- Agreement Terms -->
+      <div class="form-section">
+        <div class="form-section-title">📄 Rental Terms</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Minimum Stay (months)</label>
+            <input type="number" class="form-input" placeholder="e.g. 11" min="1">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Notice Period (months)</label>
+            <input type="number" class="form-input" placeholder="e.g. 1" min="1">
+          </div>
+          <div class="form-group form-full">
+            <label class="form-label">Payment Terms</label>
+            <input type="text" class="form-input" placeholder="e.g. Rent due on 1st of every month via bank transfer">
+          </div>
+          <div class="form-group form-full">
+            <label class="form-label">Additional Agreement Terms</label>
+            <textarea class="form-input" rows="3" placeholder="Any specific clauses, restrictions or special terms..." style="resize:vertical"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn">🚀 Submit Listing for Review</button>
+    </form>
+
+    <!-- Success Message -->
+    <div class="success-msg" id="successMsg">
+      <div class="success-circle">🎉</div>
+      <h3>Listing Submitted Successfully!</h3>
+      <p>Your property has been submitted for review. Our team will verify and publish it within 24 hours. You'll receive a confirmation email shortly.</p>
+      <a href="index.html" class="btn-primary" style="display:inline-block;padding:12px 28px">← Back to Home</a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer" style="margin-top:60px">
+  <div class="footer-bottom container">
+    <span>© 2025 <span>NestFinder</span>. All rights reserved.</span>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script>
+function getMyLocation() {
+  if (!navigator.geolocation) { alert('Geolocation not supported'); return; }
+  navigator.geolocation.getCurrentPosition(pos => {
+    document.getElementById('latInput').value = pos.coords.latitude.toFixed(6);
+    document.getElementById('lngInput').value = pos.coords.longitude.toFixed(6);
+    showToast('Location detected!', '📍');
+  }, () => showToast('Location access denied', '❌'));
+}
+</script>
+</body>
+</html>

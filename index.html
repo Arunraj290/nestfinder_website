@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NestFinder — Find Your Perfect Rental</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="mainNav">
+  <a class="nav-logo" href="index.html">
+    <div class="nav-logo-icon">
+      <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    </div>
+    Nest<span>Finder</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html" class="active">Home</a>
+    <a href="map.html">Map Search</a>
+    <a href="upload.html">List Property</a>
+    <a href="#how-it-works">How It Works</a>
+  </div>
+  <div class="nav-cta">
+    <a href="upload.html" class="btn-ghost">List Property</a>
+    <a href="map.html" class="btn-primary">🗺 Explore Map</a>
+  </div>
+  <button class="nav-hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-dots"></div>
+  <div class="hero-blob hero-blob-1"></div>
+  <div class="hero-blob hero-blob-2"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      India's Map-First Rental Platform
+    </div>
+    <h1>Find Your <em>Perfect</em><br>Rental on the Map</h1>
+    <p>Draw a circle anywhere on the map. Discover houses, apartments, and shops within your ideal radius — in seconds.</p>
+
+    <form class="hero-search" id="heroSearch">
+      <span class="hero-search-icon">🔍</span>
+      <input type="text" placeholder="Search by city, area, or landmark..." id="heroInput">
+      <button type="button" class="hero-search-btn" onclick="goToMap()">Search Map</button>
+    </form>
+
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <strong>2,400+</strong>
+        <span>Active Listings</span>
+      </div>
+      <div class="hero-stat">
+        <strong>12</strong>
+        <span>Cities Covered</span>
+      </div>
+      <div class="hero-stat">
+        <strong>98%</strong>
+        <span>Verified Owners</span>
+      </div>
+      <div class="hero-stat">
+        <strong>Free</strong>
+        <span>No Brokerage</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="hiw" id="how-it-works">
+  <div class="container text-center">
+    <div class="section-label">Simple Process</div>
+    <h2 class="section-title">How NestFinder Works</h2>
+    <p class="section-sub" style="margin:0 auto 60px">Find and rent your perfect space in three easy steps — no middlemen, no hassle.</p>
+  </div>
+  <div class="hiw-grid container">
+    <div class="hiw-card fade-in stagger-1">
+      <div class="hiw-card-num">01</div>
+      <div class="hiw-icon">🗺</div>
+      <h3>Search on Map</h3>
+      <p>Enter any city or area and explore an interactive map. Draw a circle to define your search radius and instantly see all available properties within it.</p>
+    </div>
+    <div class="hiw-card fade-in stagger-2">
+      <div class="hiw-card-num">02</div>
+      <div class="hiw-icon">🏠</div>
+      <h3>Browse & Filter</h3>
+      <p>Filter by property type (house, apartment, shop), BHK configuration, and price range. View rich details, photos, and amenities for each property.</p>
+    </div>
+    <div class="hiw-card fade-in stagger-3">
+      <div class="hiw-card-num">03</div>
+      <div class="hiw-icon">📅</div>
+      <h3>Schedule & Move In</h3>
+      <p>Book a property visit directly with the owner. Review the rental agreement online and move in — no brokerage, no delays, zero hidden fees.</p>
+    </div>
+    <div class="hiw-card fade-in stagger-4">
+      <div class="hiw-card-num">04</div>
+      <div class="hiw-icon">📋</div>
+      <h3>List Your Property</h3>
+      <p>Are you a property owner? Upload your listing in minutes — photos, video tour, amenities, and rental terms. Reach thousands of verified renters.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED PROPERTIES -->
+<section class="props-section">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <div class="section-label">Top Picks</div>
+        <h2 class="section-title">Featured Properties</h2>
+      </div>
+      <a href="map.html" class="view-all">View all on map →</a>
+    </div>
+
+    <!-- Filter bar -->
+    <div class="filter-bar" style="position:static;padding:0 0 24px;border:none;background:transparent;margin-bottom:0">
+      <button class="filter-chip active" data-filter="all">All Types</button>
+      <button class="filter-chip" data-filter="apartment">🏢 Apartment</button>
+      <button class="filter-chip" data-filter="house">🏠 House</button>
+      <button class="filter-chip" data-filter="shop">🏪 Shop</button>
+      <div class="price-filter">
+        <span>Max Price:</span>
+        <input type="range" id="priceSlider" min="10000" max="100000" value="100000" step="5000">
+        <span id="priceVal">₹1L</span>
+      </div>
+    </div>
+
+    <div class="cards-grid" id="featuredCards">
+      <!-- Populated by JS -->
+      <div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--gray-3)">Loading properties...</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<section style="background:var(--navy);padding:80px 5%;text-align:center;">
+  <div class="section-label" style="color:var(--coral)">For Property Owners</div>
+  <h2 style="color:white;font-size:2rem;margin-bottom:16px">List Your Property for Free</h2>
+  <p style="color:rgba(255,255,255,0.6);max-width:480px;margin:0 auto 32px;font-size:0.95rem">
+    Reach thousands of verified renters across India. Upload photos, set your terms, and get direct inquiries — no middlemen.
+  </p>
+  <a href="upload.html" class="btn-primary" style="padding:14px 36px;font-size:1rem">Upload Listing →</a>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-grid container">
+    <div class="footer-brand">
+      <a class="nav-logo" href="index.html" style="margin-bottom:0">
+        <div class="nav-logo-icon"><svg viewBox="0 0 24 24" style="fill:white"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></div>
+        <span style="color:white">Nest<span style="color:var(--coral)">Finder</span></span>
+      </a>
+      <p>India's first map-based rental discovery platform. Find your perfect home by drawing a circle on the map.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Discover</h4>
+      <a href="map.html">Map Search</a>
+      <a href="index.html">Apartments</a>
+      <a href="index.html">Houses</a>
+      <a href="index.html">Commercial</a>
+    </div>
+    <div class="footer-col">
+      <h4>For Owners</h4>
+      <a href="upload.html">List Property</a>
+      <a href="agreement.html">Agreements</a>
+      <a href="#">Pricing</a>
+      <a href="#">Dashboard</a>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a href="#">About Us</a>
+      <a href="#">Blog</a>
+      <a href="#">Careers</a>
+      <a href="#">Contact</a>
+    </div>
+  </div>
+  <div class="footer-bottom container">
+    <span>© 2025 <span>NestFinder</span>. All rights reserved.</span>
+    <span>Built with ❤️ for renters across India</span>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script>
+function goToMap() {
+  const q = document.getElementById('heroInput').value.trim();
+  window.location = q ? `map.html?search=${encodeURIComponent(q)}` : 'map.html';
+}
+document.getElementById('heroInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') goToMap();
+});
+</script>
+</body>
+</html>
