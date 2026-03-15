@@ -135,7 +135,9 @@
   // Render mini map
   const miniMap = L.map('miniMap', { zoomControl: false, scrollWheelZoom: false })
     .setView([p.lat, p.lng], 14);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(miniMap);
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '© Esri', maxZoom: 19
+  }).addTo(miniMap);
   const colors = { apartment: '#00A699', house: '#FFB400', shop: '#FF5A5F' };
   const icon = L.divIcon({
     className: '',
