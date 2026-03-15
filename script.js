@@ -154,10 +154,41 @@ if (heroBtn) {
 
   // Init map
   map = L.map('map', { zoomControl: true }).setView([20.5937, 78.9629], 5);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+
+  // Satellite layer (ESRI - free, no API key needed)
+  const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '© Esri © OpenStreetMap contributors',
+    maxZoom: 19
+  });
+
+  // Street layer fallback
+  const street = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© <a href="https://openstreetmap.org">OpenStreetMap</a>',
     maxZoom: 19
-  }).addTo(map);
+  });
+
+  // Start with satellite view
+  satellite.addTo(map);
+
+  // Layer toggle
+  let isSatellite = true;
+  const toggleBtn = document.getElementById('layerToggleBtn');
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', () => {
+      if (isSatellite) {
+        map.removeLayer(satellite);
+        street.addTo(map);
+        toggleBtn.innerHTML = '🛰 Satellite';
+        toggleBtn.classList.remove('active');
+      } else {
+        map.removeLayer(street);
+        satellite.addTo(map);
+        toggleBtn.innerHTML = '🗺 Street View';
+        toggleBtn.classList.add('active');
+      }
+      isSatellite = !isSatellite;
+    });
+  }
 
   // Marker icon factory
   function makeIcon(p) {
@@ -267,63 +298,20 @@ if (heroBtn) {
     if (urlSearch) { searchInput.value = urlSearch; geocode(urlSearch); }
   }
 
-  // ── Draw circle mode
+  // ── CHALO-STYLE: Press & Drag to draw circle ──────────────────────────
   let drawStart = null;
+  let isDragging = false;
+  let dragHandleMarker = null;
+
   const drawBtn = document.getElementById('drawCircleBtn');
   const clearBtn = document.getElementById('clearCircleBtn');
 
-  if (drawBtn) {
-    drawBtn.addEventListener('click', () => {
-      drawMode = !drawMode;
-      drawBtn.classList.toggle('active', drawMode);
-      map.getContainer().style.cursor = drawMode ? 'crosshair' : '';
-      if (!drawMode) showToast('Draw mode off', '✏️');
-      else showToast('Click on map to set circle center, then drag', '🎯');
-    });
-  }
-
-  if (clearBtn) {
-    clearBtn.addEventListener('click', () => {
-      if (drawCircle) { drawCircle.remove(); drawCircle = null; }
-      addMarkers(allProps);
-      const ri = document.getElementById('radiusInfo');
-      if (ri) ri.classList.remove('show');
-      showToast('Circle cleared', '🗑️');
-    });
-  }
-
-  // Click to place circle
-  map.on('click', function (e) {
-    if (!drawMode) return;
-    if (drawCircle) { drawCircle.remove(); drawCircle = null; }
-    drawStart = e.latlng;
-    drawCircle = L.circle(drawStart, {
-      radius: 5000,
-      color: '#FF5A5F', fillColor: '#FF5A5F',
-      fillOpacity: 0.08, weight: 2, dashArray: '6,4'
-    }).addTo(map);
-    filterByCircle(drawStart, 5000);
+  function updateRadiusInfo(radiusM) {
     const ri = document.getElementById('radiusInfo');
-    if (ri) { ri.textContent = `📏 Circle: 5km radius`; ri.classList.add('show'); }
-    drawMode = false;
-    if (drawBtn) drawBtn.classList.remove('active');
-    map.getContainer().style.cursor = '';
-    showToast('Circle placed! Adjust radius with slider →', '✅');
-  });
-
-  // Radius slider
-  const radiusSlider = document.getElementById('radiusSlider');
-  if (radiusSlider) {
-    radiusSlider.addEventListener('input', () => {
-      const km = parseInt(radiusSlider.value);
-      document.getElementById('radiusLabel').textContent = `${km} km`;
-      if (drawCircle && drawStart) {
-        drawCircle.setRadius(km * 1000);
-        filterByCircle(drawStart, km * 1000);
-        const ri = document.getElementById('radiusInfo');
-        if (ri) { ri.textContent = `📏 Circle: ${km}km radius`; ri.classList.add('show'); }
-      }
-    });
+    const km = (radiusM / 1000).toFixed(1);
+    if (ri) { ri.textContent = `📏 ${km} km radius`; ri.classList.add('show'); }
+    const label = document.getElementById('radiusLabel');
+    if (label) label.textContent = `${km} km`;
   }
 
   function filterByCircle(center, radiusM) {
@@ -332,6 +320,152 @@ if (heroBtn) {
       return d <= radiusM;
     });
     addMarkers(filtered);
+  }
+
+  function placeDragHandle(center, edgeLatlng) {
+    if (dragHandleMarker) dragHandleMarker.remove();
+    const handleIcon = L.divIcon({
+      className: '',
+      html: `<div style="
+        width:22px;height:22px;background:white;border:3px solid #FF5A5F;
+        border-radius:50%;box-shadow:0 2px 10px rgba(255,90,95,0.5);
+        cursor:grab;display:flex;align-items:center;justify-content:center;
+        font-size:9px;color:#FF5A5F;font-weight:800;">↔</div>`,
+      iconAnchor: [11, 11]
+    });
+    dragHandleMarker = L.marker(edgeLatlng, { icon: handleIcon, draggable: true, zIndexOffset: 1000 }).addTo(map);
+
+    dragHandleMarker.on('drag', function(e) {
+      const newRadius = map.distance(center, e.latlng);
+      if (drawCircle) drawCircle.setRadius(newRadius);
+      updateRadiusInfo(newRadius);
+      filterByCircle(center, newRadius);
+    });
+
+    dragHandleMarker.on('dragend', function(e) {
+      const newRadius = map.distance(center, e.latlng);
+      filterByCircle(center, newRadius);
+      showToast(`Area: ${(newRadius/1000).toFixed(1)}km radius`, '📏');
+    });
+  }
+
+  // MOUSEDOWN on map — start drag to draw
+  map.on('mousedown', function(e) {
+    if (!drawMode) return;
+    e.originalEvent.preventDefault();
+    isDragging = true;
+    drawStart = e.latlng;
+
+    if (drawCircle) { drawCircle.remove(); drawCircle = null; }
+    if (dragHandleMarker) { dragHandleMarker.remove(); dragHandleMarker = null; }
+
+    drawCircle = L.circle(drawStart, {
+      radius: 1,
+      color: '#FF5A5F', fillColor: '#FF5A5F',
+      fillOpacity: 0.1, weight: 2.5, dashArray: '6,4'
+    }).addTo(map);
+
+    map.dragging.disable();
+    map.getContainer().style.cursor = 'crosshair';
+  });
+
+  // MOUSEMOVE — expand circle live as user drags
+  map.on('mousemove', function(e) {
+    if (!isDragging || !drawCircle || !drawStart) return;
+    const radius = map.distance(drawStart, e.latlng);
+    drawCircle.setRadius(radius);
+    updateRadiusInfo(radius);
+  });
+
+  // MOUSEUP — finalize circle
+  map.on('mouseup', function(e) {
+    if (!isDragging || !drawCircle || !drawStart) return;
+    isDragging = false;
+    drawMode = false;
+    map.dragging.enable();
+    map.getContainer().style.cursor = '';
+    if (drawBtn) drawBtn.classList.remove('active');
+
+    const finalRadius = map.distance(drawStart, e.latlng);
+    const minRadius = 500;
+    const r = Math.max(finalRadius, minRadius);
+    drawCircle.setRadius(r);
+    updateRadiusInfo(r);
+    filterByCircle(drawStart, r);
+
+    // Place drag handle at edge (east side of circle)
+    const edgeLatlng = L.latLng(drawStart.lat, drawStart.lng + (r / 111320));
+    placeDragHandle(drawStart, edgeLatlng);
+
+    showToast(`Found properties within ${(r/1000).toFixed(1)}km`, '✅');
+  });
+
+  // TOUCH support (mobile)
+  map.getContainer().addEventListener('touchstart', function(e) {
+    if (!drawMode) return;
+    const touch = e.touches[0];
+    const latlng = map.containerPointToLatLng([touch.clientX - map.getContainer().getBoundingClientRect().left, touch.clientY - map.getContainer().getBoundingClientRect().top]);
+    isDragging = true;
+    drawStart = latlng;
+    if (drawCircle) { drawCircle.remove(); drawCircle = null; }
+    if (dragHandleMarker) { dragHandleMarker.remove(); dragHandleMarker = null; }
+    drawCircle = L.circle(drawStart, { radius: 1, color: '#FF5A5F', fillColor: '#FF5A5F', fillOpacity: 0.1, weight: 2.5, dashArray: '6,4' }).addTo(map);
+    map.dragging.disable();
+  }, { passive: true });
+
+  map.getContainer().addEventListener('touchmove', function(e) {
+    if (!isDragging || !drawCircle || !drawStart) return;
+    const touch = e.touches[0];
+    const rect = map.getContainer().getBoundingClientRect();
+    const latlng = map.containerPointToLatLng([touch.clientX - rect.left, touch.clientY - rect.top]);
+    const radius = map.distance(drawStart, latlng);
+    drawCircle.setRadius(radius);
+    updateRadiusInfo(radius);
+  }, { passive: true });
+
+  map.getContainer().addEventListener('touchend', function(e) {
+    if (!isDragging || !drawCircle || !drawStart) return;
+    const touch = e.changedTouches[0];
+    const rect = map.getContainer().getBoundingClientRect();
+    const latlng = map.containerPointToLatLng([touch.clientX - rect.left, touch.clientY - rect.top]);
+    isDragging = false;
+    drawMode = false;
+    map.dragging.enable();
+    if (drawBtn) drawBtn.classList.remove('active');
+    const r = Math.max(map.distance(drawStart, latlng), 500);
+    drawCircle.setRadius(r);
+    updateRadiusInfo(r);
+    filterByCircle(drawStart, r);
+    const edgeLatlng = L.latLng(drawStart.lat, drawStart.lng + (r / 111320));
+    placeDragHandle(drawStart, edgeLatlng);
+    showToast(`Found properties within ${(r/1000).toFixed(1)}km`, '✅');
+  }, { passive: true });
+
+  // Draw button toggle
+  if (drawBtn) {
+    drawBtn.addEventListener('click', () => {
+      drawMode = !drawMode;
+      drawBtn.classList.toggle('active', drawMode);
+      map.getContainer().style.cursor = drawMode ? 'crosshair' : '';
+      if (drawMode) showToast('Hold & drag on map to draw your search area 🎯', '✏️');
+      else { map.getContainer().style.cursor = ''; }
+    });
+  }
+
+  // Clear button
+  if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+      if (drawCircle) { drawCircle.remove(); drawCircle = null; }
+      if (dragHandleMarker) { dragHandleMarker.remove(); dragHandleMarker = null; }
+      drawStart = null; isDragging = false; drawMode = false;
+      if (drawBtn) drawBtn.classList.remove('active');
+      map.dragging.enable();
+      map.getContainer().style.cursor = '';
+      addMarkers(allProps);
+      const ri = document.getElementById('radiusInfo');
+      if (ri) ri.classList.remove('show');
+      showToast('Circle cleared', '🗑️');
+    });
   }
 
   // Property type filter chips on map
